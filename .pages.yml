@@ -1,0 +1,21 @@
+content:
+  - name: content
+    label: Seiteninhalte
+    type: file
+    path: content.json
+    fields:
+      - name: lead
+        label: Hero-Text
+        type: text
+      - name: email
+        label: Kontakt E-Mail
+        type: string
+      - name: price_basis
+        label: Preis Basis (nur Zahl)
+        type: string
+      - name: price_premium
+        label: Preis Premium (nur Zahl)
+        type: string
+      - name: price_wartung
+        label: Preis Wartung (nur Zahl)
+        type: string
