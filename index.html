@@ -1,0 +1,597 @@
+<title>AVEROKI — Webdesign-Studio</title>
+<style>
+  :root {
+    /* light (Signature) — aus der Braunpalette: Off-White · Espresso · Grundbraun #79553c */
+    --ground:   #F2EEEC;
+    --ground-2: #E4DDD8;
+    --card:     #FBF9F8;
+    --ink:      #241912;
+    --ink-soft: #6D4D36;
+    --line:     #D7CCC5;
+    --accent:   #79553C;
+    --accent-ink:#F2EEEC;
+    --warm:     #A18877;
+    --shadow:   0 1px 2px rgba(36,25,18,.06), 0 12px 34px -18px rgba(36,25,18,.24);
+
+    --f-display: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    --f-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    --f-mono: ui-monospace, "SF Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+
+    --maxw: 1120px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      /* dark — aus der Braunpalette: Espresso-Fläche, Off-White-Schrift, helleres Braun als Akzent */
+      --ground:   #18110C;
+      --ground-2: #241912;
+      --card:     #302218;
+      --ink:      #F2EEEC;
+      --ink-soft: #BCAA9E;
+      --line:     #3D2B1E;
+      --accent:   #A18877;
+      --accent-ink:#18110C;
+      --warm:     #C9BBB1;
+      --shadow:   0 1px 2px rgba(0,0,0,.55), 0 18px 44px -22px rgba(0,0,0,.85);
+    }
+  }
+  :root[data-theme="light"] {
+    --ground:#F2EEEC; --ground-2:#E4DDD8; --card:#FBF9F8; --ink:#241912;
+    --ink-soft:#6D4D36; --line:#D7CCC5; --accent:#79553C; --accent-ink:#F2EEEC;
+    --warm:#A18877; --shadow:0 1px 2px rgba(36,25,18,.06), 0 12px 34px -18px rgba(36,25,18,.24);
+  }
+  :root[data-theme="dark"] {
+    --ground:#18110C; --ground-2:#241912; --card:#302218; --ink:#F2EEEC;
+    --ink-soft:#BCAA9E; --line:#3D2B1E; --accent:#A18877; --accent-ink:#18110C;
+    --warm:#C9BBB1; --shadow:0 1px 2px rgba(0,0,0,.55), 0 18px 44px -22px rgba(0,0,0,.85);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--ground); color: var(--ink);
+    font-family: var(--f-body); line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    font-size: 17px;
+  }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+
+  .mono {
+    font-family: var(--f-mono); font-size: .72rem; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--ink-soft);
+  }
+  a { color: inherit; text-decoration: none; }
+
+  /* ---- nav ---- */
+  header {
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: saturate(1.2) blur(10px);
+    background: color-mix(in srgb, var(--ground) 82%, transparent);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav { display: flex; align-items: center; justify-content: space-between; height: 66px; }
+  .brand { display: flex; align-items: baseline; gap: 10px; font-weight: 700; letter-spacing: .14em; font-size: 1.05rem; }
+  .brand .dot { width: 9px; height: 9px; border-radius: 2px; background: var(--accent); display: inline-block; transform: rotate(45deg); }
+  .nav-links { display: flex; gap: 30px; align-items: center; }
+  .nav-links a { font-size: .92rem; color: var(--ink-soft); transition: color .15s; }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-cta {
+    font-family: var(--f-mono); font-size: .74rem; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--accent); border: 1px solid var(--accent); padding: 9px 16px; border-radius: 999px;
+    transition: background .15s, color .15s;
+  }
+  .nav-cta:hover { background: var(--accent); color: var(--accent-ink); }
+  .theme-btn {
+    background: none; border: 1px solid var(--line); color: var(--ink-soft);
+    border-radius: 999px; width: 34px; height: 34px; cursor: pointer; font-size: 15px;
+  }
+  @media (max-width: 760px){ .nav-links a:not(.nav-cta){ display:none; } }
+
+  /* ---- hero ---- */
+  .hero { padding: 96px 0 72px; position: relative; overflow: hidden; }
+  .hero-grid { display: grid; grid-template-columns: 1.35fr .9fr; gap: 56px; align-items: end; }
+  @media (max-width: 900px){ .hero-grid { grid-template-columns: 1fr; gap: 40px; } }
+
+  .eyebrow { display: flex; gap: 14px; align-items: center; margin-bottom: 26px; }
+  .eyebrow .pulse { width: 7px; height: 7px; border-radius: 50%; background: var(--warm); box-shadow: 0 0 0 0 var(--warm); animation: pulse 2.6s infinite; }
+  @keyframes pulse { 0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--warm) 60%,transparent);} 70%{box-shadow:0 0 0 9px transparent;} 100%{box-shadow:0 0 0 0 transparent;} }
+
+  h1.display {
+    font-family: var(--f-display); font-weight: 800; letter-spacing: -.03em;
+    line-height: .98; margin: 0; text-wrap: balance;
+    font-size: clamp(2.7rem, 7vw, 5.1rem);
+  }
+  h1.display .edit {
+    color: var(--accent); position: relative; cursor: text;
+    border-bottom: 2px dashed color-mix(in srgb, var(--accent) 50%, transparent);
+    outline: none; border-radius: 3px; padding: 0 2px;
+  }
+  h1.display .edit:focus { background: color-mix(in srgb, var(--accent) 14%, transparent); border-bottom-style: solid; }
+  .edit-hint {
+    display: inline-flex; align-items: center; gap: 7px; margin-top: 22px;
+    font-family: var(--f-mono); font-size: .74rem; letter-spacing: .04em; color: var(--warm);
+  }
+  .edit-hint svg { width: 15px; height: 15px; }
+  .lead { margin: 26px 0 0; max-width: 34ch; color: var(--ink-soft); font-size: 1.08rem; }
+
+  .hero-cta { display: flex; gap: 14px; margin-top: 34px; flex-wrap: wrap; }
+  .btn {
+    font-family: var(--f-body); font-weight: 600; font-size: .96rem;
+    padding: 13px 24px; border-radius: 999px; cursor: pointer; border: 1px solid transparent;
+    transition: transform .12s, background .15s, box-shadow .15s;
+  }
+  .btn-primary { background: var(--accent); color: var(--accent-ink); box-shadow: var(--shadow); }
+  .btn-primary:hover { transform: translateY(-2px); }
+  .btn-ghost { background: transparent; color: var(--ink); border-color: var(--line); }
+  .btn-ghost:hover { border-color: var(--ink); }
+
+  /* hero side stat card */
+  .hero-aside {
+    background: var(--card); border: 1px solid var(--line); border-radius: 18px;
+    padding: 24px; box-shadow: var(--shadow);
+  }
+  .hero-aside .row { display: flex; justify-content: space-between; align-items: baseline; padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .hero-aside .row:last-child { border-bottom: 0; padding-bottom: 4px; }
+  .hero-aside .row:first-child { padding-top: 4px; }
+  .hero-aside .big { font-family: var(--f-display); font-weight: 800; font-size: 1.9rem; letter-spacing: -.02em; }
+  .hero-aside .lbl { font-family: var(--f-mono); font-size: .68rem; text-transform: uppercase; letter-spacing: .1em; color: var(--ink-soft); max-width: 15ch; text-align: right; }
+
+  /* ---- thesis strip ---- */
+  .thesis { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--ground-2); }
+  .thesis .wrap { padding: 44px 24px; }
+  .thesis p { font-family: var(--f-display); font-weight: 600; font-size: clamp(1.3rem, 3.2vw, 2rem); letter-spacing: -.02em; margin: 0; max-width: 24ch; line-height: 1.2; }
+  .thesis .accent { color: var(--accent); }
+
+  /* ---- section scaffold ---- */
+  section.blk { padding: 84px 0; }
+  .sec-head { display: flex; align-items: baseline; gap: 18px; margin-bottom: 44px; }
+  .sec-head h2 { font-family: var(--f-display); font-weight: 800; letter-spacing: -.025em; font-size: clamp(1.7rem, 4vw, 2.6rem); margin: 0; }
+  .sec-num { font-family: var(--f-mono); color: var(--accent); font-size: .8rem; letter-spacing: .1em; padding-top: 6px; }
+
+  /* ---- packages ---- */
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  @media (max-width: 860px){ .cards { grid-template-columns: 1fr; } }
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 28px;
+    display: flex; flex-direction: column; gap: 16px; transition: transform .15s, border-color .15s;
+  }
+  .card:hover { transform: translateY(-4px); border-color: color-mix(in srgb, var(--accent) 40%, var(--line)); }
+  .card.feat { border-color: var(--accent); box-shadow: var(--shadow); }
+  .card .tag { font-family: var(--f-mono); font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-soft); display: flex; justify-content: space-between; }
+  .card.feat .tag span:last-child { color: var(--accent-ink); background: var(--accent); padding: 2px 8px; border-radius: 999px; }
+  .card h3 { font-family: var(--f-display); font-weight: 800; font-size: 1.5rem; margin: 0; letter-spacing: -.02em; }
+  .card .price { font-family: var(--f-display); font-weight: 800; font-size: 2.2rem; letter-spacing: -.03em; }
+  .card .price small { font-family: var(--f-mono); font-size: .72rem; font-weight: 400; color: var(--ink-soft); letter-spacing: .06em; }
+  .card ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 11px; font-size: .95rem; color: var(--ink-soft); }
+  .card li { display: flex; gap: 10px; align-items: flex-start; }
+  .card li::before { content: ""; width: 16px; height: 16px; margin-top: 3px; flex: none; border-radius: 5px; background: color-mix(in srgb, var(--accent) 18%, transparent); background-image: linear-gradient(var(--accent),var(--accent)); background-size: 9px 2px, 2px 9px; background-repeat: no-repeat; background-position: center; }
+
+  /* ---- process ---- */
+  .steps { display: grid; grid-template-columns: repeat(5,1fr); gap: 0; border-top: 1px solid var(--line); }
+  @media (max-width: 860px){ .steps { grid-template-columns: 1fr; } }
+  .step { padding: 26px 22px 30px; border-right: 1px solid var(--line); position: relative; }
+  .step:last-child { border-right: 0; }
+  @media (max-width: 860px){ .step { border-right: 0; border-bottom: 1px solid var(--line); } }
+  .step .n { font-family: var(--f-mono); color: var(--accent); font-size: .78rem; letter-spacing: .1em; }
+  .step h4 { font-family: var(--f-display); font-weight: 700; font-size: 1.12rem; margin: 14px 0 8px; letter-spacing: -.01em; }
+  .step p { margin: 0; font-size: .9rem; color: var(--ink-soft); }
+
+  /* ---- live editor demo ---- */
+  .demo { background: var(--ground-2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .demo-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: 32px; align-items: stretch; }
+  @media (max-width: 900px){ .demo-grid { grid-template-columns: 1fr; } }
+  .panel {
+    background: var(--card); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; box-shadow: var(--shadow);
+  }
+  .panel-bar { display: flex; align-items: center; gap: 8px; padding: 13px 16px; border-bottom: 1px solid var(--line); font-family: var(--f-mono); font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); }
+  .panel-bar .dots { display: flex; gap: 6px; }
+  .panel-bar .dots i { width: 9px; height: 9px; border-radius: 50%; background: var(--line); display: inline-block; }
+  .panel-body { padding: 22px; display: flex; flex-direction: column; gap: 18px; }
+  .field { display: flex; flex-direction: column; gap: 7px; }
+  .field label { font-family: var(--f-mono); font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); }
+  .field input, .field textarea {
+    font-family: var(--f-body); font-size: .95rem; color: var(--ink); background: var(--ground);
+    border: 1px solid var(--line); border-radius: 10px; padding: 11px 13px; resize: none; outline: none;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .field input:focus, .field textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent); }
+  .save-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .saved { font-family: var(--f-mono); font-size: .72rem; letter-spacing: .06em; color: var(--warm); opacity: 0; transition: opacity .2s; display: inline-flex; gap: 6px; align-items: center; }
+  .saved.show { opacity: 1; }
+
+  /* preview */
+  .preview { border: 1px solid var(--line); border-radius: 18px; overflow: hidden; display: flex; flex-direction: column; background: var(--card); box-shadow: var(--shadow); }
+  .preview-bar { display: flex; align-items: center; gap: 8px; padding: 11px 16px; border-bottom: 1px solid var(--line); }
+  .preview-bar .url { flex: 1; text-align: center; font-family: var(--f-mono); font-size: .72rem; color: var(--ink-soft); background: var(--ground); border-radius: 999px; padding: 5px 12px; }
+  .preview-canvas { padding: 44px 34px; flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 16px; background: linear-gradient(160deg, color-mix(in srgb,var(--accent) 8%, var(--card)), var(--card)); }
+  #pv-h { font-family: var(--f-display); font-weight: 800; font-size: clamp(1.6rem,4vw,2.4rem); letter-spacing: -.03em; line-height: 1.02; margin: 0; text-wrap: balance; }
+  #pv-p { margin: 0; color: var(--ink-soft); max-width: 40ch; }
+  #pv-btn { align-self: flex-start; margin-top: 8px; background: var(--accent); color: var(--accent-ink); font-weight: 600; padding: 11px 22px; border-radius: 999px; font-size: .92rem; }
+  .flash { animation: flash .5s ease; }
+  @keyframes flash { 0%{ background: color-mix(in srgb,var(--warm) 22%, transparent);} 100%{ background: transparent; } }
+
+  /* ---- contact ---- */
+  .contact { padding: 96px 0; text-align: center; }
+  .contact h2 { font-family: var(--f-display); font-weight: 800; letter-spacing: -.03em; font-size: clamp(2rem,6vw,3.6rem); margin: 0 0 18px; text-wrap: balance; }
+  .contact p { color: var(--ink-soft); max-width: 44ch; margin: 0 auto 32px; }
+
+  footer { border-top: 1px solid var(--line); padding: 34px 0; }
+  .foot { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; color: var(--ink-soft); font-size: .85rem; }
+
+  /* ---- Beispiele / Vorschau-Galerie ---- */
+  .ex-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+  @media (max-width: 860px){ .ex-grid { grid-template-columns: 1fr; } }
+  .ex-card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; cursor: pointer; transition: transform .15s, border-color .15s; box-shadow: var(--shadow); text-align: left; padding: 0; font: inherit; color: inherit; }
+  .ex-card:hover { transform: translateY(-4px); border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+  .ex-thumb { height: 156px; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; padding: 16px 18px; }
+  .ex-thumb .mnav { position: absolute; top: 13px; left: 18px; right: 18px; display: flex; justify-content: space-between; align-items: center; font-size: .58rem; letter-spacing: .18em; text-transform: uppercase; opacity: .9; }
+  .ex-thumb .mdot { width: 6px; height: 6px; border-radius: 1px; transform: rotate(45deg); display: inline-block; margin-right: 5px; }
+  .ex-thumb h5 { margin: 0; font-family: var(--f-display); font-weight: 800; font-size: 1.5rem; letter-spacing: -.025em; line-height: .95; }
+  .ex-thumb .msub { font-size: .64rem; margin-top: 6px; opacity: .8; letter-spacing: .02em; }
+  .ex-thumb .mbtn { margin-top: 11px; align-self: flex-start; font-size: .58rem; padding: 5px 12px; border-radius: 999px; font-weight: 600; }
+  .ex-meta { padding: 15px 18px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--line); }
+  .ex-meta .t { font-family: var(--f-display); font-weight: 700; font-size: 1.02rem; }
+  .ex-meta .tag { font-family: var(--f-mono); font-size: .64rem; text-transform: uppercase; letter-spacing: .1em; color: var(--ink-soft); }
+  .ex-meta .open { font-family: var(--f-mono); font-size: .66rem; color: var(--accent); display: flex; align-items: center; gap: 5px; }
+
+  /* ---- Demo-Vorschau Modal ---- */
+  .modal { position: fixed; inset: 0; z-index: 200; display: none; }
+  .modal.open { display: block; }
+  .modal-bg { position: absolute; inset: 0; background: rgba(24,17,12,.62); }
+  .modal-scroll { position: absolute; inset: 0; overflow-y: auto; padding: 46px 16px 60px; }
+  .modal-frame { max-width: 860px; margin: 0 auto; border-radius: 14px; overflow: hidden; box-shadow: 0 30px 90px -24px rgba(0,0,0,.7); }
+  .modal-hint { max-width: 860px; margin: 0 auto 12px; text-align: center; font-family: var(--f-mono); font-size: .68rem; letter-spacing: .08em; color: #F2EEEC; opacity: .85; }
+  .modal-close { position: fixed; top: 16px; right: 16px; z-index: 210; width: 42px; height: 42px; border-radius: 50%; border: 0; background: #F2EEEC; color: #18110C; font-size: 20px; cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,.35); }
+
+  /* generisches Demo-Template (eigene Farbwelt je Vorlage über --g/--tx/--ac/--acx) */
+  .tpl { font-family: var(--f-body); background: var(--g); color: var(--tx); }
+  .tpl .tnav { display: flex; justify-content: space-between; align-items: center; padding: 18px 30px; font-size: .82rem; border-bottom: 1px solid color-mix(in srgb, var(--tx) 12%, transparent); }
+  .tpl .tbrand { font-family: var(--f-display); font-weight: 800; letter-spacing: .1em; }
+  .tpl .tlinks span { margin-left: 20px; opacity: .75; }
+  @media (max-width: 620px){ .tpl .tlinks { display: none; } }
+  .tpl .thero { padding: 66px 30px 58px; }
+  .tpl .thero.dark { background: var(--tx); color: var(--g); }
+  .tpl .thero .eyb { font-family: var(--f-mono); font-size: .66rem; letter-spacing: .18em; text-transform: uppercase; opacity: .7; }
+  .tpl .thero h1 { font-family: var(--f-display); font-weight: 800; font-size: clamp(2rem,5.5vw,3.4rem); line-height: 1; letter-spacing: -.03em; margin: 14px 0 16px; max-width: 15ch; text-wrap: balance; }
+  .tpl .thero p { max-width: 42ch; opacity: .82; margin: 0 0 26px; line-height: 1.5; }
+  .tpl .tcta { display: inline-block; background: var(--ac); color: var(--acx); padding: 12px 26px; border-radius: 999px; font-weight: 600; font-size: .9rem; }
+  .tpl .tstrip { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: color-mix(in srgb, var(--tx) 14%, transparent); }
+  @media (max-width: 620px){ .tpl .tstrip { grid-template-columns: 1fr; } }
+  .tpl .tstrip > div { background: var(--g); padding: 26px 24px; }
+  .tpl .tstrip .ic { width: 30px; height: 30px; border-radius: 8px; background: color-mix(in srgb, var(--ac) 22%, transparent); display: flex; align-items: center; justify-content: center; color: var(--ac); margin-bottom: 12px; }
+  .tpl .tstrip h3 { font-family: var(--f-display); font-weight: 700; margin: 0 0 6px; font-size: 1.08rem; }
+  .tpl .tstrip p { margin: 0; font-size: .82rem; opacity: .72; line-height: 1.45; }
+  .tpl .tband { background: var(--ac); color: var(--acx); padding: 46px 30px; text-align: center; }
+  .tpl .tband h2 { font-family: var(--f-display); font-weight: 800; font-size: clamp(1.4rem,4vw,2rem); margin: 0 0 8px; letter-spacing: -.02em; }
+  .tpl .tband p { margin: 0 0 20px; opacity: .85; font-size: .9rem; }
+  .tpl .tband .tcta { background: var(--g); color: var(--tx); }
+  .tpl .tfoot { padding: 20px 30px; font-size: .72rem; opacity: .6; display: flex; justify-content: space-between; }
+
+  @media (prefers-reduced-motion: reduce){ *{ animation: none !important; transition: none !important; } }
+
+  .reveal { opacity: 0; transform: translateY(16px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+</style>
+
+<script>
+  // Helle, cleane Variante als Standard (Toggle schaltet auf Dark)
+  if (!document.documentElement.getAttribute('data-theme'))
+    document.documentElement.setAttribute('data-theme','light');
+</script>
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#top"><span class="dot"></span>AVEROKI</a>
+    <nav class="nav-links">
+      <a href="#beispiele">Beispiele</a>
+      <a href="#ablauf">Ablauf</a>
+      <a href="#preise">Preise</a>
+      <a href="#editor">Selbst bearbeiten</a>
+      <a class="nav-cta" href="#kontakt">Projekt anfragen</a>
+      <button class="theme-btn" id="theme" aria-label="Theme wechseln">◐</button>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <div class="eyebrow">
+          <span class="pulse"></span>
+          <span class="mono">Webdesign-Studio · Made in Germany</span>
+        </div>
+        <h1 class="display">
+          Von uns gebaut.<br>
+          Von <span class="edit" contenteditable="true" spellcheck="false">dir</span> gepflegt.
+        </h1>
+        <div class="edit-hint">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+          Klick ins blaue Wort und schreib's um — so einfach ist es später für dich.
+        </div>
+        <p class="lead">AVEROKI baut schnelle, individuelle Websites — mit einem Dashboard, in dem du Texte, Bilder und Preise jederzeit selbst änderst. Kein Entwickler-Ticket für jede Kleinigkeit.</p>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="#kontakt">Kostenloses Erstgespräch</a>
+          <a class="btn btn-ghost" href="#editor">Live ausprobieren</a>
+        </div>
+      </div>
+      <aside class="hero-aside">
+        <div class="row"><span class="big">0&nbsp;€</span><span class="lbl">für Änderungen, die du selbst machst</span></div>
+        <div class="row"><span class="big">&lt; 3 Wo.</span><span class="lbl">vom Kickoff bis online</span></div>
+        <div class="row"><span class="big">100 %</span><span class="lbl">dir gehört Code &amp; Inhalte</span></div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- THESIS -->
+  <div class="thesis">
+    <div class="wrap">
+      <p>Die meisten Agenturen bauen Seiten, bei denen du für <span class="accent">jede Änderung zahlst.</span> Wir bauen Seiten, die du selbst in der Hand hast.</p>
+    </div>
+  </div>
+
+  <!-- PACKAGES -->
+  <section class="blk" id="preise">
+    <div class="wrap">
+      <div class="sec-head"><span class="sec-num">/ Pakete</span><h2>Ein Preis, der zu dir passt</h2></div>
+      <div class="cards">
+        <div class="card">
+          <div class="tag"><span>01 — Basis</span><span>Start</span></div>
+          <h3>Basis</h3>
+          <div class="price">ab 1.399&nbsp;€ <small>einmalig</small></div>
+          <ul>
+            <li>Individuelle One-Page oder kleine Website</li>
+            <li>Mobil-optimiert &amp; schnell</li>
+            <li>Änderungen laufen über uns</li>
+            <li>Optional: Wartung als Add-on</li>
+          </ul>
+          <a class="btn btn-ghost" href="#kontakt" style="margin-top:auto">Anfragen</a>
+        </div>
+        <div class="card feat">
+          <div class="tag"><span>02 — Premium</span><span>Beliebt</span></div>
+          <h3>Premium</h3>
+          <div class="price">ab 2.499&nbsp;€ <small>+ CMS ab 19&nbsp;€/Mon.</small></div>
+          <ul>
+            <li>Alles aus Basis</li>
+            <li>Redaktions-Dashboard — du änderst selbst</li>
+            <li>Onboarding &amp; Schulung inklusive</li>
+            <li>Texte, Bilder, Preise ohne uns anpassbar</li>
+          </ul>
+          <a class="btn btn-primary" href="#kontakt" style="margin-top:auto">Anfragen</a>
+        </div>
+        <div class="card">
+          <div class="tag"><span>03 — Wartung</span><span>Add-on</span></div>
+          <h3>Wartung</h3>
+          <div class="price">ab 59&nbsp;€ <small>pro Monat</small></div>
+          <ul>
+            <li>Wir übernehmen Änderungen für dich</li>
+            <li>Updates, Backups &amp; Sicherheit</li>
+            <li>Fester Ansprechpartner</li>
+            <li>Zu jedem Paket kombinierbar</li>
+          </ul>
+          <a class="btn btn-ghost" href="#kontakt" style="margin-top:auto">Anfragen</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section class="blk" id="ablauf" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head"><span class="sec-num">/ Ablauf</span><h2>Von der Idee bis live</h2></div>
+    </div>
+    <div class="wrap"><div class="steps">
+      <div class="step"><span class="n">01</span><h4>Kennenlernen</h4><p>Kostenloses Gespräch: Ziele, Zielgruppe, Budget.</p></div>
+      <div class="step"><span class="n">02</span><h4>Design</h4><p>Entwurf zum Anfassen — kein Blindkauf.</p></div>
+      <div class="step"><span class="n">03</span><h4>Umsetzung</h4><p>Wir bauen schnell, sauber und individuell.</p></div>
+      <div class="step"><span class="n">04</span><h4>Dashboard</h4><p>Onboarding: du lernst, alles selbst zu pflegen.</p></div>
+      <div class="step"><span class="n">05</span><h4>Live &amp; Support</h4><p>Wir schalten frei und bleiben erreichbar.</p></div>
+    </div></div>
+  </section>
+
+  <!-- LIVE EDITOR DEMO -->
+  <section class="demo" id="editor">
+    <div class="wrap blk">
+      <div class="sec-head"><span class="sec-num">/ Demo</span><h2>So bearbeitest du deine Seite später</h2></div>
+      <div class="demo-grid">
+        <div class="panel">
+          <div class="panel-bar"><span class="dots"><i></i><i></i><i></i></span> AVEROKI · Dashboard</div>
+          <div class="panel-body">
+            <div class="field">
+              <label for="in-h">Überschrift</label>
+              <input id="in-h" type="text" value="Frische Logistik für den Großhandel" maxlength="60">
+            </div>
+            <div class="field">
+              <label for="in-p">Beschreibung</label>
+              <textarea id="in-p" rows="3" maxlength="160">Zuverlässige B2B-Belieferung — pünktlich, gekühlt, transparent.</textarea>
+            </div>
+            <div class="field">
+              <label for="in-b">Button-Text</label>
+              <input id="in-b" type="text" value="Angebot anfragen" maxlength="24">
+            </div>
+            <div class="save-row">
+              <button class="btn btn-primary" id="save" style="padding:11px 22px">Speichern</button>
+              <span class="saved" id="saved">✓ Gespeichert · live in 1&nbsp;Sek.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="preview">
+          <div class="preview-bar"><span class="dots"><i></i><i></i><i></i></span><span class="url">deine-website.de</span></div>
+          <div class="preview-canvas" id="canvas">
+            <h3 id="pv-h">Frische Logistik für den Großhandel</h3>
+            <p id="pv-p">Zuverlässige B2B-Belieferung — pünktlich, gekühlt, transparent.</p>
+            <span id="pv-btn">Angebot anfragen</span>
+          </div>
+        </div>
+      </div>
+      <p class="mono" style="margin-top:22px; text-align:center; opacity:.8">Tipp links etwas ein → rechts ändert sich deine „Website" sofort. Genau dieses Prinzip bekommst du im Premium-Paket.</p>
+    </div>
+  </section>
+
+  <!-- BEISPIELE -->
+  <section class="blk" id="beispiele">
+    <div class="wrap">
+      <div class="sec-head"><span class="sec-num">/ Beispiele</span><h2>So könnte deine Website aussehen</h2></div>
+      <p class="lead" style="max-width:46ch; margin:-24px 0 40px">Klick eine Vorlage an — sie öffnet sich als kleine Demo-Seite. Jedes Projekt bekommt am Ende sein eigenes Design; das hier zeigt nur die Bandbreite.</p>
+      <div class="ex-grid">
+
+        <button class="ex-card" onclick="openDemo('casa')">
+          <div class="ex-thumb" style="background:#F4ECDD;color:#2C231A">
+            <div class="mnav"><span><span class="mdot" style="background:#6E7A3E"></span>CASA VERDE</span><span>Menü · Reservieren</span></div>
+            <h5>Frisch. <br>Regional. Täglich.</h5>
+            <span class="mbtn" style="background:#6E7A3E;color:#F4ECDD">Tisch reservieren</span>
+          </div>
+          <div class="ex-meta"><span class="t">Restaurant &amp; Café</span><span class="open">Vorschau <span aria-hidden="true">↗</span></span></div>
+        </button>
+
+        <button class="ex-card" onclick="openDemo('bau')">
+          <div class="ex-thumb" style="background:#17181B;color:#F2F1EE">
+            <div class="mnav"><span><span class="mdot" style="background:#D2542A"></span>NORDBAU</span><span>Leistungen · Referenzen</span></div>
+            <h5>Wir bauen,<br>worauf man zählt.</h5>
+            <span class="mbtn" style="background:#D2542A;color:#17181B">Angebot anfragen</span>
+          </div>
+          <div class="ex-meta"><span class="t">Handwerk &amp; Bau</span><span class="open">Vorschau <span aria-hidden="true">↗</span></span></div>
+        </button>
+
+        <button class="ex-card" onclick="openDemo('lumen')">
+          <div class="ex-thumb" style="background:#F6F3F8;color:#1E1826">
+            <div class="mnav"><span><span class="mdot" style="background:#6C4A86"></span>LUMEN</span><span>Coaching · Termine</span></div>
+            <h5>Klarheit,<br>Schritt für Schritt.</h5>
+            <span class="mbtn" style="background:#6C4A86;color:#F6F3F8">Erstgespräch buchen</span>
+          </div>
+          <div class="ex-meta"><span class="t">Coaching &amp; Beratung</span><span class="open">Vorschau <span aria-hidden="true">↗</span></span></div>
+        </button>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="kontakt">
+    <div class="wrap">
+      <span class="mono">/ Kontakt</span>
+      <h2>Lass uns deine Website bauen.</h2>
+      <p>Erzähl mir kurz von deinem Projekt — am schnellsten per WhatsApp. Im kostenlosen Erstgespräch klären wir, welches Paket passt.</p>
+      <div class="hero-cta" style="justify-content:center">
+        <a class="btn btn-primary" href="https://wa.me/4917630555295?text=Hallo%20Alexander%2C%20ich%20interessiere%20mich%20f%C3%BCr%20eine%20Website.%20" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" style="width:17px;height:17px;vertical-align:-3px;margin-right:8px"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.9-4.45 9.9-9.91C21.95 6.45 17.5 2 12.04 2Zm5.8 14.16c-.24.68-1.4 1.3-1.94 1.35-.5.05-1.13.07-1.82-.11a15 15 0 0 1-1.65-.61c-2.9-1.25-4.79-4.17-4.94-4.36-.14-.19-1.18-1.57-1.18-2.99 0-1.42.75-2.12 1.01-2.41.26-.29.57-.36.76-.36.19 0 .38 0 .55.01.18.01.42-.07.65.5.24.58.82 2 .89 2.14.07.14.12.31.02.5-.09.19-.14.31-.28.48-.14.17-.29.37-.42.5-.14.14-.28.29-.12.57.16.29.71 1.17 1.53 1.9 1.05.94 1.94 1.23 2.22 1.37.28.14.44.12.6-.07.16-.19.69-.81.88-1.09.18-.28.37-.23.62-.14.25.09 1.6.75 1.88.89.28.14.46.21.53.33.07.12.07.68-.17 1.35Z"/></svg>
+          WhatsApp: 0176 30555295
+        </a>
+        <a class="btn btn-ghost" href="mailto:alexvergiehn@gmail.com?subject=Website-Anfrage%20AVEROKI">alexvergiehn@gmail.com</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- DEMO-VORSCHAU MODAL -->
+<div class="modal" id="demoModal" role="dialog" aria-modal="true" aria-label="Website-Vorschau">
+  <div class="modal-bg" onclick="closeDemo()"></div>
+  <button class="modal-close" onclick="closeDemo()" aria-label="Vorschau schließen">✕</button>
+  <div class="modal-scroll" id="demoScroll">
+    <div class="modal-hint">Demo-Vorschau · Beispieldesign von AVEROKI</div>
+    <div class="modal-frame">
+
+      <div class="tpl demo-tpl" data-demo="casa" style="--g:#F4ECDD;--tx:#2C231A;--ac:#6E7A3E;--acx:#F4ECDD;display:none">
+        <div class="tnav"><span class="tbrand">CASA VERDE</span><span class="tlinks"><span>Speisekarte</span><span>Reservieren</span><span>Kontakt</span></span></div>
+        <div class="thero">
+          <span class="eyb">Restaurant · seit 1998</span>
+          <h1>Frisch. Regional. Jeden Tag.</h1>
+          <p>Saisonale Küche aus der Region, ein kleiner Weinkeller und ein Platz an der Sonne. Willkommen in der Casa Verde.</p>
+          <span class="tcta">Tisch reservieren</span>
+        </div>
+        <div class="tstrip">
+          <div><div class="ic"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 3v18M8 3v6a3 3 0 0 1-3 3M16 3c-1 4-1 8 0 12M16 15v6"/></svg></div><h3>Mittagstisch</h3><p>Täglich wechselnd, frisch gekocht, fair kalkuliert.</p></div>
+          <div><div class="ic"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18M5 8c0 4 3 6 7 6s7-2 7-6"/></svg></div><h3>Saisonküche</h3><p>Zutaten von Höfen aus der Umgebung, im Rhythmus der Jahreszeit.</p></div>
+          <div><div class="ic"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 21h8M12 15v6M6 3h12l-1 7a5 5 0 0 1-10 0Z"/></svg></div><h3>Weinbar</h3><p>Offene Weine und kleine Plätze zum Verweilen am Abend.</p></div>
+        </div>
+        <div class="tband"><h2>Heute noch einen Tisch?</h2><p>Reservier in 30 Sekunden — wir freuen uns auf dich.</p><span class="tcta">Jetzt reservieren</span></div>
+        <div class="tfoot"><span>© CASA VERDE</span><span>Demo · AVEROKI</span></div>
+      </div>
+
+      <div class="tpl demo-tpl" data-demo="bau" style="--g:#F2F1EE;--tx:#17181B;--ac:#D2542A;--acx:#17181B;display:none">
+        <div class="tnav"><span class="tbrand">NORDBAU</span><span class="tlinks"><span>Leistungen</span><span>Referenzen</span><span>Kontakt</span></span></div>
+        <div class="thero dark">
+          <span class="eyb">Hoch- &amp; Tiefbau</span>
+          <h1>Wir bauen, worauf man zählt.</h1>
+          <p>Seit 30 Jahren solide Handwerksarbeit aus einer Hand — vom Rohbau bis schlüsselfertig, termintreu und sauber.</p>
+          <span class="tcta">Angebot anfragen</span>
+        </div>
+        <div class="tstrip">
+          <div><div class="ic"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V10l7-5 7 5v11M10 21v-6h4v6"/></svg></div><h3>Rohbau</h3><p>Fundament, Mauerwerk, Beton — die Basis, die hält.</p></div>
+          <div><div class="ic"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3l7 7-4 4-7-7ZM10 7l-7 7v4h4l7-7"/></svg></div><h3>Sanierung</h3><p>Altbau modernisieren, energetisch auf den neuesten Stand.</p></div>
+          <div><div class="ic"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 3 7v10l9 5 9-5V7ZM9 12l2 2 4-4"/></svg></div><h3>Schlüsselfertig</h3><p>Ein Ansprechpartner, ein Termin, ein fertiges Haus.</p></div>
+        </div>
+        <div class="tband"><h2>Projekt geplant?</h2><p>Sag uns kurz, was ansteht — Erstberatung kostenlos.</p><span class="tcta">Kostenlos anfragen</span></div>
+        <div class="tfoot"><span>© NORDBAU</span><span>Demo · AVEROKI</span></div>
+      </div>
+
+      <div class="tpl demo-tpl" data-demo="lumen" style="--g:#F6F3F8;--tx:#1E1826;--ac:#6C4A86;--acx:#F6F3F8;display:none">
+        <div class="tnav"><span class="tbrand">LUMEN</span><span class="tlinks"><span>Angebot</span><span>Über mich</span><span>Termine</span></span></div>
+        <div class="thero">
+          <span class="eyb">Coaching &amp; Beratung</span>
+          <h1>Klarheit, Schritt für Schritt.</h1>
+          <p>Persönliches Coaching für Menschen im Umbruch. Gemeinsam finden wir Struktur, Ziele und den nächsten konkreten Schritt.</p>
+          <span class="tcta">Erstgespräch buchen</span>
+        </div>
+        <div class="tstrip">
+          <div><div class="ic"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8ZM5 21c0-4 3-6 7-6s7 2 7 6"/></svg></div><h3>Einzelcoaching</h3><p>1:1-Sitzungen, ganz auf deine Situation zugeschnitten.</p></div>
+          <div><div class="ic"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16v11H4ZM8 21h8M12 16v5"/></svg></div><h3>Workshops</h3><p>Impulse in der Gruppe — kompakt, praxisnah, umsetzbar.</p></div>
+          <div><div class="ic"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg></div><h3>Online</h3><p>Ortsunabhängig per Video — flexibel in deinen Alltag.</p></div>
+        </div>
+        <div class="tband"><h2>Bereit für den ersten Schritt?</h2><p>Kostenloses Kennenlernen, unverbindlich und in Ruhe.</p><span class="tcta">Termin finden</span></div>
+        <div class="tfoot"><span>© LUMEN Coaching</span><span>Demo · AVEROKI</span></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap foot">
+    <span class="brand" style="font-size:.95rem"><span class="dot"></span>AVEROKI</span>
+    <span class="mono">© 2026 AVEROKI · Webdesign-Studio</span>
+  </div>
+</footer>
+
+<script>
+  // theme toggle
+  const root = document.documentElement, tb = document.getElementById('theme');
+  tb.addEventListener('click', () => {
+    const cur = root.getAttribute('data-theme')
+      || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    root.setAttribute('data-theme', cur === 'dark' ? 'light' : 'dark');
+  });
+
+  // live editor -> preview
+  const bind = (inp, out) => {
+    const i = document.getElementById(inp), o = document.getElementById(out);
+    i.addEventListener('input', () => { o.textContent = i.value || ' '; });
+  };
+  bind('in-h','pv-h'); bind('in-p','pv-p'); bind('in-b','pv-btn');
+
+  const canvas = document.getElementById('canvas'), saved = document.getElementById('saved');
+  document.getElementById('save').addEventListener('click', () => {
+    canvas.classList.remove('flash'); void canvas.offsetWidth; canvas.classList.add('flash');
+    saved.classList.add('show');
+    setTimeout(() => saved.classList.remove('show'), 2200);
+  });
+
+  // Demo-Vorschau öffnen/schließen
+  window.openDemo = function(id){
+    document.querySelectorAll('.demo-tpl').forEach(t => t.style.display = (t.dataset.demo === id ? 'block' : 'none'));
+    document.getElementById('demoModal').classList.add('open');
+    document.getElementById('demoScroll').scrollTop = 0;
+    document.body.style.overflow = 'hidden';
+  };
+  window.closeDemo = function(){
+    document.getElementById('demoModal').classList.remove('open');
+    document.body.style.overflow = '';
+  };
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDemo(); });
+
+  // scroll reveal
+  document.querySelectorAll('section.blk, .thesis, .contact').forEach(el => el.classList.add('reveal'));
+  const io = new IntersectionObserver((ents) => {
+    ents.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: .12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
