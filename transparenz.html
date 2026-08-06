@@ -1,0 +1,291 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Transparenz — AVEROKI</title>
+<meta name="description" content="Was an deiner Website KI-gestützt entsteht, was von Hand kommt und was der EU AI Act ab dem 2. August 2026 wirklich verlangt — offen erklärt, ohne Drohkulisse.">
+<style>
+  :root {
+    --ground:   #F2EEEC;
+    --ground-2: #E4DDD8;
+    --card:     #FBF9F8;
+    --ink:      #241912;
+    --ink-soft: #6D4D36;
+    --line:     #D7CCC5;
+    --accent:   #79553C;
+    --accent-ink:#F2EEEC;
+    --warm:     #A18877;
+    --shadow:   0 1px 2px rgba(36,25,18,.06), 0 12px 34px -18px rgba(36,25,18,.24);
+
+    --f-display: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    --f-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    --f-mono: ui-monospace, "SF Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+
+    --maxw: 1120px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ground:#18110C; --ground-2:#241912; --card:#302218; --ink:#F2EEEC;
+      --ink-soft:#BCAA9E; --line:#3D2B1E; --accent:#A18877; --accent-ink:#18110C;
+      --warm:#C9BBB1; --shadow:0 1px 2px rgba(0,0,0,.55), 0 18px 44px -22px rgba(0,0,0,.85);
+    }
+  }
+  :root[data-theme="light"] {
+    --ground:#F2EEEC; --ground-2:#E4DDD8; --card:#FBF9F8; --ink:#241912;
+    --ink-soft:#6D4D36; --line:#D7CCC5; --accent:#79553C; --accent-ink:#F2EEEC;
+    --warm:#A18877; --shadow:0 1px 2px rgba(36,25,18,.06), 0 12px 34px -18px rgba(36,25,18,.24);
+  }
+  :root[data-theme="dark"] {
+    --ground:#18110C; --ground-2:#241912; --card:#302218; --ink:#F2EEEC;
+    --ink-soft:#BCAA9E; --line:#3D2B1E; --accent:#A18877; --accent-ink:#18110C;
+    --warm:#C9BBB1; --shadow:0 1px 2px rgba(0,0,0,.55), 0 18px 44px -22px rgba(0,0,0,.85);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--ground); color: var(--ink);
+    font-family: var(--f-body); line-height: 1.6;
+    -webkit-font-smoothing: antialiased; font-size: 17px; overflow-x: hidden;
+  }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+  .mono { font-family: var(--f-mono); font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-soft); }
+  a { color: inherit; text-decoration: none; }
+
+  /* ---- nav ---- */
+  header {
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: saturate(1.2) blur(10px);
+    background: color-mix(in srgb, var(--ground) 82%, transparent);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav { display: flex; align-items: center; justify-content: space-between; height: 66px; }
+  .brand { display: flex; align-items: baseline; gap: 10px; font-weight: 700; letter-spacing: .14em; font-size: 1.05rem; }
+  .brand .dot { width: 9px; height: 9px; border-radius: 2px; background: var(--accent); display: inline-block; transform: rotate(45deg); }
+  .nav-links { display: flex; gap: 30px; align-items: center; }
+  .nav-links a { font-size: .92rem; color: var(--ink-soft); transition: color .15s; }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-cta {
+    font-family: var(--f-mono); font-size: .74rem; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--accent); border: 1px solid var(--accent); padding: 9px 16px; border-radius: 999px;
+    transition: background .15s, color .15s;
+  }
+  .nav-cta:hover { background: var(--accent); color: var(--accent-ink); }
+  .theme-btn { background: none; border: 1px solid var(--line); color: var(--ink-soft); border-radius: 999px; width: 34px; height: 34px; cursor: pointer; font-size: 15px; }
+  @media (max-width: 760px){ .nav-links a:not(.nav-cta){ display:none; } }
+
+  /* ---- intro ---- */
+  .intro { padding: 76px 0 40px; }
+  .eyebrow { display: flex; gap: 14px; align-items: center; margin-bottom: 26px; }
+  .eyebrow .pulse { width: 7px; height: 7px; border-radius: 50%; background: var(--warm); box-shadow: 0 0 0 0 var(--warm); animation: pulse 2.6s infinite; }
+  @keyframes pulse { 0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--warm) 60%,transparent);} 70%{box-shadow:0 0 0 9px transparent;} 100%{box-shadow:0 0 0 0 transparent;} }
+  h1.display { font-family: var(--f-display); font-weight: 800; letter-spacing: -.03em; line-height: 1.02; margin: 0; font-size: clamp(2.3rem, 6vw, 4rem); max-width: 16ch; }
+  h1.display .accent { color: var(--accent); }
+  .lead { margin: 26px 0 0; max-width: 60ch; color: var(--ink-soft); font-size: 1.1rem; }
+  .back { display: inline-block; margin-top: 28px; font-family: var(--f-mono); font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); transition: color .15s; }
+  .back:hover { color: var(--ink); }
+
+  /* ---- section scaffold ---- */
+  section.blk { padding: 56px 0; }
+  section.blk + section.blk { border-top: 1px solid var(--line); }
+  .sec-head { display: flex; align-items: baseline; gap: 18px; margin-bottom: 34px; }
+  .sec-head h2 { font-family: var(--f-display); font-weight: 800; letter-spacing: -.025em; font-size: clamp(1.55rem, 3.6vw, 2.2rem); margin: 0; }
+  .sec-num { font-family: var(--f-mono); color: var(--accent); font-size: .8rem; letter-spacing: .1em; padding-top: 6px; }
+  .sec-intro { max-width: 64ch; color: var(--ink-soft); margin: -14px 0 30px; font-size: 1.02rem; }
+
+  /* ---- panels / split ---- */
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 720px){ .split { grid-template-columns: 1fr; } }
+  .panel { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 28px; box-shadow: var(--shadow); }
+  .panel.mark { border-color: color-mix(in srgb, var(--accent) 42%, var(--line)); }
+  .panel .plabel { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+  .panel h3 { font-family: var(--f-display); font-weight: 800; font-size: 1.2rem; letter-spacing: -.01em; margin: 8px 0 14px; }
+  ul.flow { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; font-size: .97rem; color: var(--ink-soft); }
+  ul.flow li { display: flex; gap: 11px; align-items: flex-start; }
+  ul.flow li::before { content: "→"; width: 18px; height: 18px; margin-top: 2px; flex: none; border-radius: 5px; background: color-mix(in srgb, var(--accent) 18%, transparent); color: var(--accent); font-size: 11px; font-weight: 700; line-height: 1; display: flex; align-items: center; justify-content: center; }
+  ul.flow.plain li::before { content: "–"; background: transparent; color: var(--ink-soft); }
+  .after { margin: 24px 0 0; font-size: 1.02rem; color: var(--ink); max-width: 62ch; }
+  .after strong { font-weight: 700; }
+
+  /* ---- highlight callout ---- */
+  .highlight { margin-top: 22px; background: var(--ground-2); border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 14px; padding: 22px 24px; }
+  .highlight p { margin: 0; max-width: 64ch; }
+  .highlight p + p { margin-top: 12px; }
+  .fineprint { margin-top: 18px; display: block; max-width: 66ch; line-height: 1.7; }
+
+  /* ---- closing ---- */
+  .closing { background: var(--ground-2); border-top: 1px solid var(--line); }
+  .closing .wrap { padding: 56px 24px; display: flex; align-items: center; justify-content: space-between; gap: 28px; flex-wrap: wrap; }
+  .closing h2 { font-family: var(--f-display); font-weight: 800; letter-spacing: -.02em; font-size: clamp(1.4rem, 3vw, 2rem); margin: 0; max-width: 20ch; }
+  .btn { font-family: var(--f-body); font-weight: 600; font-size: .96rem; padding: 13px 24px; border-radius: 999px; cursor: pointer; border: 1px solid transparent; transition: transform .12s, background .15s, box-shadow .15s; display: inline-block; }
+  .btn-primary { background: var(--accent); color: var(--accent-ink); box-shadow: var(--shadow); }
+  .btn-primary:hover { transform: translateY(-2px); }
+
+  /* ---- footer ---- */
+  footer { border-top: 1px solid var(--line); padding: 34px 0; }
+  .foot { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+
+  /* ---- motion (Progressive Enhancement: ohne JS ist alles sichtbar) ---- */
+  html:not(.js) .reveal { opacity: 1; transform: none; }
+  .reveal { opacity: 0; transform: translateY(16px); transition: opacity .7s cubic-bezier(.22,.61,.36,1), transform .7s cubic-bezier(.22,.61,.36,1); }
+  .reveal.in { opacity: 1; transform: none; }
+  .intro > .wrap > * { animation: fadeUp .7s cubic-bezier(.22,.61,.36,1) both; }
+  .intro .eyebrow { animation-delay: .02s; }
+  .intro h1 { animation-delay: .10s; }
+  .intro .lead { animation-delay: .18s; }
+  .intro .back { animation-delay: .26s; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal, .intro > .wrap > * { opacity: 1 !important; transform: none !important; transition: none !important; animation: none !important; }
+  }
+</style>
+
+<script>
+  // JS aktiv → Reveal-Animationen scharf schalten (ohne JS bleibt alles sichtbar)
+  document.documentElement.classList.add('js');
+  // Helle Variante als Standard (Toggle schaltet auf Dark) — wie auf der Startseite
+  if (!document.documentElement.getAttribute('data-theme'))
+    document.documentElement.setAttribute('data-theme','light');
+</script>
+
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="/"><span class="dot"></span>AVEROKI</a>
+    <nav class="nav-links">
+      <a href="/#beispiele">Beispiele</a>
+      <a href="/#ablauf">Ablauf</a>
+      <a href="/#preise">Preise</a>
+      <a class="nav-cta" href="/#kontakt">Projekt anfragen</a>
+      <button class="theme-btn" id="theme" aria-label="Theme wechseln">◐</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- INTRO -->
+  <section class="intro">
+    <div class="wrap">
+      <div class="eyebrow"><span class="pulse"></span><span class="mono">Transparenz</span></div>
+      <h1 class="display">Du sollst wissen, <span class="accent">was du kaufst.</span></h1>
+      <p class="lead">Deshalb legen wir offen, was an deiner Website KI-gestützt entsteht, was von Hand kommt und welche Pflichten im Betrieb bei dir liegen. Ohne Drohkulisse, ohne „tickende Zeitbombe" — nur das, was der EU AI Act ab dem 2. August 2026 wirklich verlangt.</p>
+      <a class="back" href="/">← Zurück zur Startseite</a>
+    </div>
+  </section>
+
+  <!-- 01 — KI vs. Hand -->
+  <section class="blk">
+    <div class="wrap">
+      <div class="sec-head reveal"><span class="sec-num">01</span><h2>Was KI macht — und was von Hand kommt</h2></div>
+      <div class="split">
+        <div class="panel reveal">
+          <div class="plabel"><span class="mono">KI-gestützt</span></div>
+          <h3>Wo KI schneller zum Ziel führt</h3>
+          <ul class="flow">
+            <li>Erste Textentwürfe und Varianten</li>
+            <li>Bild- und Moodboard-Ideen, Platzhalter-Visuals</li>
+            <li>Vorschläge für Layout und Struktur</li>
+            <li>Code-Gerüst für wiederkehrende Bausteine</li>
+            <li>Schnelles Durchprobieren, bis es sitzt</li>
+          </ul>
+        </div>
+        <div class="panel mark reveal">
+          <div class="plabel"><span class="mono">Von Hand &amp; geprüft</span></div>
+          <h3>Wo ein Mensch entscheidet</h3>
+          <ul class="flow">
+            <li>Strategie, Aufbau und roter Faden</li>
+            <li>Finale Texte und Feinschliff</li>
+            <li>Rechtliche Pflichttexte wie Impressum und Datenschutz</li>
+            <li>Auswahl und Freigabe jedes einzelnen Bausteins</li>
+            <li>Technische Umsetzung, Tempo und Barrierefreiheit</li>
+            <li>Die Verantwortung für das, was online geht</li>
+          </ul>
+        </div>
+      </div>
+      <p class="after reveal"><strong>Kurz:</strong> KI beschleunigt, entscheidet aber nicht. Jeder Baustein, der live geht, ist von einem Menschen geprüft und freigegeben.</p>
+    </div>
+  </section>
+
+  <!-- 02 — AI Act -->
+  <section class="blk">
+    <div class="wrap">
+      <div class="sec-head reveal"><span class="sec-num">02</span><h2>Was der EU AI Act ab dem 2.8.2026 verlangt</h2></div>
+      <p class="sec-intro reveal">Es gibt <strong>keine</strong> allgemeine Pflicht, alles zu kennzeichnen, was mit KI entstanden ist. Der AI Act regelt vier klar abgegrenzte Fälle — für eine normale Website ist im Kern genau einer davon relevant.</p>
+      <div class="split">
+        <div class="panel mark reveal">
+          <div class="plabel"><span class="mono">Kennzeichnen</span></div>
+          <h3>Muss erkennbar sein</h3>
+          <ul class="flow">
+            <li>Chatbots und Voicebots — erkennbar, <em>bevor</em> du schreibst</li>
+            <li>Deepfakes: künstlich erzeugte Bild-, Ton- oder Videofälschungen</li>
+            <li>Emotionserkennung und biometrische Kategorisierung</li>
+          </ul>
+        </div>
+        <div class="panel reveal">
+          <div class="plabel"><span class="mono">Nicht nötig</span></div>
+          <h3>Fällt nicht darunter</h3>
+          <ul class="flow plain">
+            <li>Normale Website-, Marketing- und Produkttexte</li>
+            <li>Layout und Code der Website</li>
+            <li>KI-gestützt erstellte, redaktionell geprüfte Inhalte</li>
+          </ul>
+        </div>
+      </div>
+      <div class="highlight reveal">
+        <p><strong>Was das für deine Website heißt:</strong> Für die meisten Seiten trifft nichts davon zu. Kommt ein KI-Chatbot dazu, bauen wir den Hinweis sichtbar ein — bevor der erste Satz getippt wird, nicht versteckt im Impressum.</p>
+        <p>Die Durchsetzung liegt bei den Behörden (in Deutschland voraussichtlich beim BSI). Kleine und mittlere Betriebe werden bei der Bemessung ausdrücklich besonders berücksichtigt.</p>
+      </div>
+      <span class="mono fineprint reveal">Stand: August 2026. Diese Seite fasst unseren Kenntnisstand zusammen und ersetzt keine Rechtsberatung. Für die verbindliche Beurteilung deines Einzelfalls hol dir bitte anwaltlichen Rat.</span>
+    </div>
+  </section>
+
+  <!-- 03 — Übergabe -->
+  <section class="blk">
+    <div class="wrap">
+      <div class="sec-head reveal"><span class="sec-num">03</span><h2>Was du bei der Übergabe bekommst</h2></div>
+      <p class="sec-intro reveal">Zu jedem Projekt gehört eine kurze Dokumentation der KI-gestützten Bausteine — damit du auch nach der Übergabe genau weißt, was wie entstanden ist.</p>
+      <div class="panel reveal">
+        <div class="plabel"><span class="mono">In der Übergabe-Doku</span></div>
+        <ul class="flow">
+          <li>Welche Texte, Bilder und Komponenten KI-gestützt entstanden sind</li>
+          <li>Welches Werkzeug dafür genutzt wurde</li>
+          <li>Wer es geprüft und freigegeben hat</li>
+          <li>Welche Hinweispflichten für deine Seite gelten — etwa die Chatbot-Kennzeichnung</li>
+          <li>Was du im laufenden Betrieb beachten solltest</li>
+        </ul>
+      </div>
+      <p class="after reveal">So bekommst du kein Blackbox-Produkt, sondern eine Website, deren Entstehung nachvollziehbar dokumentiert ist.</p>
+    </div>
+  </section>
+
+  <!-- CLOSING -->
+  <section class="closing">
+    <div class="wrap">
+      <h2>Fragen zu einem konkreten Punkt? Wir gehen es mit dir durch.</h2>
+      <a class="btn btn-primary" href="/#kontakt">Projekt anfragen</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span class="brand" style="font-size:.95rem"><span class="dot"></span>AVEROKI</span>
+    <span class="mono" style="display:flex; gap:20px">
+      <a href="/impressum" style="color:inherit">Impressum</a>
+      <a href="/datenschutz" style="color:inherit">Datenschutz</a>
+    </span>
+    <span class="mono">© 2026 AVEROKI · Webdesign-Studio</span>
+  </div>
+</footer>
+
+<script>
+  // theme toggle — wie auf der Startseite
+  const root = document.documentElement, tb = document.getElementById('theme');
+  tb.addEventListener('click', () => {
+    const cur = root.getAttribute('data-theme')
+      || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    root.setAttribute('data-theme', cur === 'dark' ? 'light' : 'dark');
+  });
+
+  // sanftes Einblenden beim Scrollen
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { rootMargin: '0px 0px -8% 0px', threshold: .12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
