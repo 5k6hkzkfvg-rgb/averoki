@@ -216,6 +216,40 @@
   @keyframes auroraDrift { 0% { transform: translate3d(-2%,0,0) scale(1); } 100% { transform: translate3d(3%,-4%,0) scale(1.08); } }
   .hero > .wrap { position: relative; z-index: 1; }
 
+  /* ---- Cineastisches Foto-Bokeh mit Slow-Zoom + Glüh-Atmen (beide Modi, Scroll-Parallax) ---- */
+  .hero-bokeh { display: none; position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+  :root[data-theme="dark"] .hero-bokeh,
+  :root[data-theme="light"] .hero-bokeh { display: block; }
+
+  /* Parallax-Layer (GSAP verschiebt ihn beim Scrollen) */
+  .bokeh-layer { position: absolute; top: -40%; left: 0; right: 0; height: 180%; will-change: transform; }
+  .bokeh-layer::before {
+    content: ""; position: absolute; inset: -6%;
+    background: url("hero-bokeh.png") center center / cover no-repeat;
+    transform: scale(1.05);
+    animation: kenburns 24s ease-in-out infinite alternate, bokehGlow 8s ease-in-out infinite;
+    will-change: transform, filter;
+  }
+  @keyframes kenburns {
+    from { transform: scale(1.05) translate3d(0,0,0); }
+    to   { transform: scale(1.16) translate3d(-2%,-1.6%,0); }
+  }
+  @keyframes bokehGlow {
+    0%,100% { filter: brightness(1)    saturate(1);    }
+    50%     { filter: brightness(1.14) saturate(1.08); }
+  }
+  /* Overlay je Modus — sichert Textkontrast + weichen Ground-Übergang */
+  .hero-bokeh::after { content: ""; position: absolute; inset: 0; }
+  :root[data-theme="dark"] .hero-bokeh::after {
+    background: linear-gradient(180deg, rgba(24,17,12,.46) 0%, rgba(24,17,12,.34) 42%, rgba(24,17,12,.72) 82%, var(--ground) 100%);
+  }
+  :root[data-theme="light"] .hero-bokeh::after {
+    background: linear-gradient(180deg, rgba(242,238,236,.60) 0%, rgba(242,238,236,.50) 42%, rgba(242,238,236,.82) 82%, var(--ground) 100%);
+  }
+  /* Foto übernimmt — schwebende Site-Cards ausblenden */
+  :root[data-theme="dark"] .hero-bg,
+  :root[data-theme="light"] .hero-bg { display: none; }
+
   /* sanftes Schweben der Cards */
   .site1 { animation: floaty 7s ease-in-out infinite; }
   .site2 { animation: floaty 7s ease-in-out -2.3s infinite; }
@@ -422,6 +456,7 @@
 
   .reveal { opacity: 0; transform: translateY(16px); transition: opacity .6s ease, transform .6s ease; }
   .reveal.in { opacity: 1; transform: none; }
+
 </style>
 
 <script>
@@ -447,6 +482,7 @@
 <main id="top">
   <!-- HERO -->
   <section class="hero">
+    <div class="hero-bokeh" aria-hidden="true"><div class="bokeh-layer"></div></div>
     <div class="hero-bg" aria-hidden="true">
       <div class="fsite fa"><span class="fbar"><i></i><i></i><i></i></span><span class="fbody"><span class="fimg" style="background:linear-gradient(135deg,#8A9A52,#6E7A3E)"></span><span class="fl"></span><span class="fl s"></span></span></div>
       <div class="fsite fb"><span class="fbar"><i></i><i></i><i></i></span><span class="fbody"><span class="fimg" style="background:linear-gradient(135deg,#E0703F,#D2542A)"></span><span class="fl"></span><span class="fl s"></span></span></div>
@@ -537,6 +573,7 @@
           <a class="btn btn-ghost" href="#kontakt" style="margin-top:auto">Anfragen</a>
         </div>
       </div>
+        <p class="mono" style="margin-top:26px;text-align:center;text-transform:none;letter-spacing:.02em">Alle Preise verstehen sich netto zzgl. 19&nbsp;% MwSt.</p>
     </div>
   </section>
 
@@ -665,6 +702,7 @@
   </section>
 </main>
 
+
 <!-- DEMO-VORSCHAU MODAL -->
 <div class="modal" id="demoModal" role="dialog" aria-modal="true" aria-label="Website-Vorschau">
   <div class="modal-bg" onclick="closeDemo()"></div>
@@ -754,6 +792,8 @@
     root.setAttribute('data-theme', cur === 'dark' ? 'light' : 'dark');
   });
 
+  // (Partikel-Bokeh entfernt — Hero nutzt wieder das Foto-Bokeh via CSS)
+
   // Inhalte aus dem CMS (content.json) laden — mit Fallback auf die im HTML stehenden Werte
   fetch('content.json?v=' + Date.now()).then(r => r.json()).then(c => {
     const apply = (key, fn) => {
@@ -827,7 +867,7 @@
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDemo(); });
 
   // scroll reveal
-  document.querySelectorAll('section.blk:not(#preise), .thesis, .contact').forEach(el => el.classList.add('reveal'));
+  document.querySelectorAll('section.blk:not(#preise):not(#ablauf), .thesis, .contact').forEach(el => el.classList.add('reveal'));
   const io = new IntersectionObserver((ents) => {
     ents.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
   }, { threshold: .12 });
@@ -881,6 +921,7 @@
       gsap.set(cards, { '--tx': '52px', '--op': 0 });
       const tl = gsap.timeline({
         scrollTrigger: {
+          id: 'preise',
           trigger: '#preise',
           start: 'top top',
           end: '+=' + (cards.length * 380),
@@ -892,5 +933,41 @@
       });
       return () => gsap.set(cards, { clearProps: '--tx,--op' });
     });
+
+    // Hero-Bokeh: sanfter Scroll-Parallax (beide Modi) — driftet langsamer als der Inhalt = Tiefe
+    gsap.matchMedia().add("(prefers-reduced-motion: no-preference)", () => {
+      const tw = gsap.to('.bokeh-layer', {
+        yPercent: -20, ease: 'none',
+        scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true }
+      });
+      return () => { if (tw.scrollTrigger) tw.scrollTrigger.kill(); tw.kill(); };
+    });
+
+    // Ablauf-Schritte: bauen sich beim Reinscrollen nacheinander von unten auf — anderer Look als die Preise
+    gsap.matchMedia().add("(prefers-reduced-motion: no-preference)", () => {
+      const t = gsap.from('#ablauf .sec-head, #ablauf .step', {
+        y: 46, scale: 0.94, opacity: 0, transformOrigin: '50% 100%',
+        duration: 0.55, stagger: 0.12, ease: 'power3.out',
+        scrollTrigger: { trigger: '#ablauf', start: 'top 80%' }
+      });
+      return () => { if (t.scrollTrigger) t.scrollTrigger.kill(); t.kill(); };
+    });
   }
+
+  // Header-Klick "Preise": sanft bis ans Ende der Karten-Sequenz scrollen,
+  // damit die Karten von rechts einfliegen (nutzt den bestehenden Pin-Effekt).
+  // Normales Scrollen bleibt davon unberührt.
+  (function(){
+    const link = document.querySelector('.nav-links a[href="#preise"]');
+    if (!link) return;
+    link.addEventListener('click', (e) => {
+      const st = window.ScrollTrigger && ScrollTrigger.getById('preise');
+      if (st) {                       // Desktop mit aktivem Pin-Effekt
+        e.preventDefault();
+        window.scrollTo({ top: Math.max(0, Math.round(st.end) - 2), behavior: 'smooth' });
+      }
+      // sonst (Mobile / reduced-motion): normaler Anker-Sprung
+    });
+  })();
+
 </script>
