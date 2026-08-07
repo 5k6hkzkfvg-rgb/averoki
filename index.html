@@ -223,28 +223,44 @@
 
   /* Parallax-Layer (GSAP verschiebt ihn beim Scrollen) */
   .bokeh-layer { position: absolute; top: -40%; left: 0; right: 0; height: 180%; will-change: transform; }
-  .bokeh-layer::before {
-    content: ""; position: absolute; inset: -6%;
-    background: url("hero-bokeh.png") center center / cover no-repeat;
+  .bokeh-layer::before { content: ""; position: absolute; will-change: transform, filter; }
+  /* Dark: fotografisches Bokeh (die warmen Lichter leuchten auf dunkel) */
+  :root[data-theme="dark"] .bokeh-layer::before {
+    inset: -6%;
+    background: url("hero-bokeh.jpg") center center / cover no-repeat;
     transform: scale(1.05);
     animation: kenburns 24s ease-in-out infinite alternate, bokehGlow 8s ease-in-out infinite;
-    will-change: transform, filter;
+  }
+  /* Light: dasselbe Foto-Bokeh, per Filter in warme Markentöne gedreht und via
+     multiply aufs Off-White gelegt -> weiche, leicht gräulich-warme Bokeh-Atmosphäre */
+  :root[data-theme="light"] .bokeh-layer::before {
+    inset: -6%;
+    background: url("hero-bokeh.jpg") center center / cover no-repeat;
+    transform: scale(1.05);
+    filter: invert(1) brightness(1.28) contrast(1.22) sepia(.5) saturate(1.6) hue-rotate(342deg);
+    mix-blend-mode: multiply;
+    opacity: .4;
+    animation: kenburns 24s ease-in-out infinite alternate, bokehGlow 8s ease-in-out infinite;
   }
   @keyframes kenburns {
     from { transform: scale(1.05) translate3d(0,0,0); }
     to   { transform: scale(1.16) translate3d(-2%,-1.6%,0); }
   }
+  @keyframes auroraFloat {
+    from { transform: translate3d(-3%, 1%, 0) scale(1);   }
+    to   { transform: translate3d(4%, -3%, 0) scale(1.1); }
+  }
   @keyframes bokehGlow {
     0%,100% { filter: brightness(1)    saturate(1);    }
     50%     { filter: brightness(1.14) saturate(1.08); }
   }
-  /* Overlay je Modus — sichert Textkontrast + weichen Ground-Übergang */
+  /* Overlay je Modus: Dark dunkelt fürs Foto ab; Light nur sanfter Ground-Fade unten */
   .hero-bokeh::after { content: ""; position: absolute; inset: 0; }
   :root[data-theme="dark"] .hero-bokeh::after {
     background: linear-gradient(180deg, rgba(24,17,12,.46) 0%, rgba(24,17,12,.34) 42%, rgba(24,17,12,.72) 82%, var(--ground) 100%);
   }
   :root[data-theme="light"] .hero-bokeh::after {
-    background: linear-gradient(180deg, rgba(242,238,236,.60) 0%, rgba(242,238,236,.50) 42%, rgba(242,238,236,.82) 82%, var(--ground) 100%);
+    background: linear-gradient(180deg, transparent 58%, var(--ground) 100%);
   }
   /* Foto übernimmt — schwebende Site-Cards ausblenden */
   :root[data-theme="dark"] .hero-bg,
@@ -468,10 +484,10 @@
   <div class="wrap nav">
     <a class="brand" href="#top"><span class="dot"></span>AVEROKI</a>
     <nav class="nav-links">
-      <a href="#beispiele">Beispiele</a>
-      <a href="#ablauf">Ablauf</a>
       <a href="#preise">Preise</a>
+      <a href="#ablauf">Ablauf</a>
       <a href="#editor">Selbst bearbeiten</a>
+      <a href="#beispiele">Beispiele</a>
       <a href="/transparenz">Transparenz</a>
       <a class="nav-cta" href="#kontakt">Projekt anfragen</a>
       <button class="theme-btn" id="theme" aria-label="Theme wechseln">◐</button>
